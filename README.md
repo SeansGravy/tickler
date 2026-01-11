@@ -8,19 +8,31 @@ A native macOS menu bar app for tracking cryptocurrency and stock prices in real
 
 ## Download
 
-**[⬇️ Download tickler.dmg](https://github.com/SeansGravy/tickler/releases/latest/download/tickler.dmg)**
+**[Download tickler.dmg](https://github.com/SeansGravy/tickler/releases/latest/download/tickler.dmg)**
 
-*First launch: Right-click → Open to bypass Gatekeeper (unsigned app)*
+*First launch: Right-click and Open to bypass Gatekeeper (unsigned app)*
 
 ## Features
 
-- **Real-time crypto prices** via Coinbase WebSocket (no API key required)
-- **Stock prices** via Alpaca Markets API (free account required)
+- **Real-time crypto prices** via Coinbase WebSocket
+- **Stock prices** via Yahoo Finance (no API key required)
+- **Price alerts** with customizable thresholds and notifications
+- **Click-to-trade** opens your preferred broker/exchange
 - **Menu bar display** showing up to 10 symbols with compact formatting
-- **Drag-to-reorder** symbol management
+- **Drag-to-reorder** symbol management with search
 - **Launch at login** support
 - **Offline detection** with stale data indicators
-- Supports **Coinbase** and **Kraken** for crypto, **Alpaca** for stocks
+- **Zero API keys required** - works out of the box
+
+## Supported Platforms
+
+| Type | Platform | Click-to-trade |
+|------|----------|----------------|
+| Crypto | Coinbase | coinbase.com |
+| Crypto | Kraken | kraken.com |
+| Stocks | Yahoo Finance | finance.yahoo.com |
+| Stocks | Robinhood | robinhood.com |
+| Stocks | TradingView | tradingview.com |
 
 ## Installation
 
@@ -50,19 +62,6 @@ open tickler.xcodeproj
 
 Build and run with `Cmd+R`. The app will appear in your menu bar.
 
-## Alpaca Setup (for Stock Prices)
-
-Stock prices require a free Alpaca Markets account:
-
-1. Sign up at [alpaca.markets](https://alpaca.markets)
-2. Go to your [Paper Trading Dashboard](https://app.alpaca.markets/paper/dashboard/overview)
-3. Navigate to **API Keys** and generate a new key pair
-4. In tickler, click the menu bar icon → **Settings**
-5. Enter your API Key ID and Secret Key
-6. Save settings
-
-**Note:** Free Alpaca accounts provide 15-minute delayed data.
-
 ## Usage
 
 ### Adding Symbols
@@ -71,7 +70,7 @@ Stock prices require a free Alpaca Markets account:
 2. Click **Edit Symbols** or the **+** button
 3. Enter the ticker symbol (e.g., `BTC`, `AAPL`)
 4. Select crypto or stock type
-5. Choose the exchange (Coinbase/Kraken for crypto, Alpaca for stocks)
+5. Choose the exchange/broker
 
 ### Menu Bar Display
 
@@ -85,27 +84,67 @@ BTC $104.5k ▲2.3% | ETH $3.9k ▼0.5%
 - Drag symbols to reorder them in the Edit Symbols view
 - Top symbols appear in the menu bar
 
+### Click-to-Trade
+
+Click any symbol in the dropdown to open its page on your chosen platform:
+- Crypto: Opens Coinbase or Kraken price page
+- Stocks: Opens Yahoo Finance, Robinhood, or TradingView
+
+### Price Alerts
+
+1. Open **Edit Symbols**
+2. Click the pencil icon on any symbol
+3. Enable alerts and set thresholds:
+   - Alert when price goes above a value
+   - Alert when price goes below a value
+   - Alert on percent change threshold
+4. Alerts appear as macOS notifications
+
+Configure notification style and cooldown in Settings > Alerts.
+
 ### Price Formatting
 
 | Price Range | Format |
 |-------------|--------|
-| ≥ $1,000,000 | $1.2M |
-| ≥ $1,000 | $104.5k |
+| >= $1,000,000 | $1.2M |
+| >= $1,000 | $104.5k |
 | < $1,000 | $123.45 |
 
 ### Indicators
 
-- **▲** Green arrow: positive 24h change
-- **▼** Red arrow: negative 24h change
-- **⚠️** Warning: stale data (>60s old) or connection issue
+- **up arrow** Green: positive 24h change
+- **down arrow** Red: negative 24h change
+- **warning sign**: stale data (>60s old) or connection issue
+- **bell icon**: symbol has active price alerts
+
+## Settings
+
+### Display Tab
+- Number of symbols in menu bar (1-10)
+- Show/hide percent change
+- Compact prices ($90.5k) vs full prices ($90,468.60)
+- Decimal places for non-compact prices
+
+### Data Tab
+- Real-time streaming toggle for crypto
+- Stock refresh interval (15s, 30s, 1m, 5m)
+- Pause streaming on battery
+
+### Alerts Tab
+- Enable/disable price alerts globally
+- Notification style (banner, sound, both)
+- Alert cooldown period (5m to 4h)
+
+### System Tab
+- Launch at login
+- Reset to defaults
 
 ## Data Sources
 
 | Type | Source | Update Frequency |
 |------|--------|------------------|
 | Crypto | Coinbase WebSocket | Real-time |
-| Crypto | Kraken | Real-time |
-| Stocks | Alpaca REST API | 60 seconds |
+| Stocks | Yahoo Finance | Configurable (15s-5m) |
 
 ## Storage
 
@@ -115,7 +154,8 @@ BTC $104.5k ▲2.3% | ETH $3.9k ▼0.5%
 ## Requirements
 
 - macOS 13.0 (Ventura) or later
-- For stocks: Alpaca Markets account (free)
+- Internet connection
+- No API keys required
 
 ## Building a DMG
 
@@ -133,9 +173,9 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 If you find tickler useful, consider supporting development:
 
-☕ [Buy Me a Coffee](https://buymeacoffee.com/wedigp9ylf)
+[Buy Me a Coffee](https://buymeacoffee.com/wedigp9ylf)
 
-💜 [GitHub Sponsors](https://github.com/sponsors/SeansGravy)
+[GitHub Sponsors](https://github.com/sponsors/SeansGravy)
 
 ## Credits
 

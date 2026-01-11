@@ -25,7 +25,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.seansgravy.tickler
         INFOPLIST_FILE: tickler/Resources/Info.plist
-        PRODUCT_NAME: tickler
+        PRODUCT_NAME: Tickler
         CODE_SIGN_STYLE: Automatic
         ENABLE_HARDENED_RUNTIME: YES
         COMBINE_HIDPI_IMAGES: YES
@@ -33,7 +33,7 @@ targets:
       path: tickler/Resources/Info.plist
       properties:
         LSUIElement: true
-        CFBundleDisplayName: tickler
+        CFBundleDisplayName: Tickler
         NSHighResolutionCapable: true
     entitlements:
       path: tickler/Resources/tickler.entitlements

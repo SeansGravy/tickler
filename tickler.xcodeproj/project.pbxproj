@@ -9,11 +9,15 @@
 /* Begin PBXBuildFile section */
 		1C5D1225647E727D21487DC7 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FF9D33982B0D15B1B30078 /* AppState.swift */; };
 		2351747489A8C2D2B681998B /* PriceFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C85894C063587022BAB9E3F /* PriceFormatter.swift */; };
+		23650A9EE9D053BA7F08052F /* YahooFinanceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27DAAF5F820532B57B77421 /* YahooFinanceAPI.swift */; };
 		2F4ECF89B09FBBEB161D7E74 /* SymbolStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2EE1E17B1470CAC24BC7E4 /* SymbolStore.swift */; };
+		375280E2B87803A0A0FF0C52 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8921D888407C55EB915B124F /* AlertManager.swift */; };
 		3C752C84DE22DD78174462E1 /* PriceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA791811A6716838293C406B /* PriceManager.swift */; };
 		3D8473965D50FD894246EB0F /* SymbolListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7B3AA2A6D19671312848F8 /* SymbolListView.swift */; };
+		59F2656CF2C54A107E4B4BF4 /* EditSymbolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEC897FED574C73A2641AE7 /* EditSymbolView.swift */; };
 		60417C6A1BD3431ED1EEDEE4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C5794149170C9885C59D54F /* Assets.xcassets */; };
 		730C40EFBD4C4BA66955D3F8 /* PriceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7FA40867D2EF5E2BCC7BA8 /* PriceData.swift */; };
+		7C002A60143D169D0DD836C9 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D0F49C19AB73191A007AED /* Logger.swift */; };
 		7D183C8E0EA43FBB6B828C10 /* DropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5CE71FFB71DAEF503F5E218 /* DropdownView.swift */; };
 		994705DE48DC0DDFA7747523 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3C78B124BCA1C4CF2F863B /* AppSettings.swift */; };
 		A595EADAE60AC641E6D6360D /* LaunchAtLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 467C6E3806529AFBF7F3E26F /* LaunchAtLogin.swift */; };
@@ -23,23 +27,25 @@
 		EEBB74CD4C7E25AE0EE676A0 /* ticklerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86A49CD53BA43FB14469690 /* ticklerApp.swift */; };
 		EFAB2CBA54DA9BE43FE3AFC4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FD0D0FDE66C5C80C24C323 /* SettingsView.swift */; };
 		F6904FB7EC15F2A4D5696C1B /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82EB643683BD10D5DEF13B41 /* SettingsManager.swift */; };
-		F79851F85281B18DE656184D /* AlpacaAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3313B7387507173819E7CCF0 /* AlpacaAPI.swift */; };
 		F8B08499BF13629F2E14A630 /* AddSymbolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A945DCFDD4B978B10FFB8567 /* AddSymbolView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0C7B3AA2A6D19671312848F8 /* SymbolListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolListView.swift; sourceTree = "<group>"; };
-		3313B7387507173819E7CCF0 /* AlpacaAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlpacaAPI.swift; sourceTree = "<group>"; };
 		3B3C78B124BCA1C4CF2F863B /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		3C5794149170C9885C59D54F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3EEC897FED574C73A2641AE7 /* EditSymbolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSymbolView.swift; sourceTree = "<group>"; };
 		467C6E3806529AFBF7F3E26F /* LaunchAtLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLogin.swift; sourceTree = "<group>"; };
 		4C85894C063587022BAB9E3F /* PriceFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceFormatter.swift; sourceTree = "<group>"; };
 		61FF9D33982B0D15B1B30078 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		71D0F49C19AB73191A007AED /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		7E2EE1E17B1470CAC24BC7E4 /* SymbolStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolStore.swift; sourceTree = "<group>"; };
 		82EB643683BD10D5DEF13B41 /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
 		83FD0D0FDE66C5C80C24C323 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		8921D888407C55EB915B124F /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		9E40D1A03E87A57E1CC561E4 /* tickler.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = tickler.entitlements; sourceTree = "<group>"; };
 		9F8E6CD63DF1312CA7A6FDA2 /* tickler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tickler.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A27DAAF5F820532B57B77421 /* YahooFinanceAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YahooFinanceAPI.swift; sourceTree = "<group>"; };
 		A945DCFDD4B978B10FFB8567 /* AddSymbolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSymbolView.swift; sourceTree = "<group>"; };
 		B86A49CD53BA43FB14469690 /* ticklerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ticklerApp.swift; sourceTree = "<group>"; };
 		BB7FA40867D2EF5E2BCC7BA8 /* PriceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceData.swift; sourceTree = "<group>"; };
@@ -64,7 +70,9 @@
 		347AF1470B121E1E04CC183B /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				8921D888407C55EB915B124F /* AlertManager.swift */,
 				467C6E3806529AFBF7F3E26F /* LaunchAtLogin.swift */,
+				71D0F49C19AB73191A007AED /* Logger.swift */,
 				4C85894C063587022BAB9E3F /* PriceFormatter.swift */,
 			);
 			path = Utilities;
@@ -100,6 +108,7 @@
 			children = (
 				A945DCFDD4B978B10FFB8567 /* AddSymbolView.swift */,
 				F5CE71FFB71DAEF503F5E218 /* DropdownView.swift */,
+				3EEC897FED574C73A2641AE7 /* EditSymbolView.swift */,
 				CCB61D01AE0F3930BECDBCD3 /* MenuBarView.swift */,
 				83FD0D0FDE66C5C80C24C323 /* SettingsView.swift */,
 				0C7B3AA2A6D19671312848F8 /* SymbolListView.swift */,
@@ -133,10 +142,10 @@
 		E739CFC5DF8F32A1A6627FBE /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				3313B7387507173819E7CCF0 /* AlpacaAPI.swift */,
 				D18A7CA354D9C9B92B43CCE0 /* CoinbaseWebSocket.swift */,
 				82EB643683BD10D5DEF13B41 /* SettingsManager.swift */,
 				7E2EE1E17B1470CAC24BC7E4 /* SymbolStore.swift */,
+				A27DAAF5F820532B57B77421 /* YahooFinanceAPI.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -212,12 +221,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8B08499BF13629F2E14A630 /* AddSymbolView.swift in Sources */,
-				F79851F85281B18DE656184D /* AlpacaAPI.swift in Sources */,
+				375280E2B87803A0A0FF0C52 /* AlertManager.swift in Sources */,
 				994705DE48DC0DDFA7747523 /* AppSettings.swift in Sources */,
 				1C5D1225647E727D21487DC7 /* AppState.swift in Sources */,
 				A6CE55FDED2DC4E0504F36DC /* CoinbaseWebSocket.swift in Sources */,
 				7D183C8E0EA43FBB6B828C10 /* DropdownView.swift in Sources */,
+				59F2656CF2C54A107E4B4BF4 /* EditSymbolView.swift in Sources */,
 				A595EADAE60AC641E6D6360D /* LaunchAtLogin.swift in Sources */,
+				7C002A60143D169D0DD836C9 /* Logger.swift in Sources */,
 				E745392C45120EF2C0FA5F90 /* MenuBarView.swift in Sources */,
 				730C40EFBD4C4BA66955D3F8 /* PriceData.swift in Sources */,
 				2351747489A8C2D2B681998B /* PriceFormatter.swift in Sources */,
@@ -227,6 +238,7 @@
 				C63D849B462E863F49D23C5C /* Symbol.swift in Sources */,
 				3D8473965D50FD894246EB0F /* SymbolListView.swift in Sources */,
 				2F4ECF89B09FBBEB161D7E74 /* SymbolStore.swift in Sources */,
+				23650A9EE9D053BA7F08052F /* YahooFinanceAPI.swift in Sources */,
 				EEBB74CD4C7E25AE0EE676A0 /* ticklerApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -248,7 +260,7 @@
 					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.seansgravy.tickler;
-				PRODUCT_NAME = tickler;
+				PRODUCT_NAME = Tickler;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -390,7 +402,7 @@
 					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.seansgravy.tickler;
-				PRODUCT_NAME = tickler;
+				PRODUCT_NAME = Tickler;
 				SDKROOT = macosx;
 			};
 			name = Release;

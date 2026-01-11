@@ -54,8 +54,12 @@ actor CoinbaseWebSocketService {
     }
 
     func connect(productIds: [String]) async {
-        guard !productIds.isEmpty else { return }
+        guard !productIds.isEmpty else {
+            AppLogger.log("No product IDs to connect", category: "Coinbase")
+            return
+        }
 
+        AppLogger.log("Connecting with products: \(productIds)", category: "Coinbase")
         subscribedProducts = Set(productIds)
         shouldReconnect = true
         await performConnect()
@@ -86,20 +90,26 @@ actor CoinbaseWebSocketService {
     }
 
     private func performConnect() async {
-        guard !isConnecting else { return }
+        guard !isConnecting else {
+            AppLogger.log("Already connecting, skipping", category: "Coinbase")
+            return
+        }
         isConnecting = true
 
+        AppLogger.log("Performing connect to \(url)", category: "Coinbase")
         stateSubject.send(.connecting)
 
         webSocketTask = session.webSocketTask(with: url)
         webSocketTask?.resume()
 
         // Send subscription
+        AppLogger.log("Sending subscription for \(subscribedProducts)", category: "Coinbase")
         await sendSubscribe(productIds: Array(subscribedProducts))
 
         isConnecting = false
         reconnectAttempts = 0
         stateSubject.send(.connected)
+        AppLogger.log("Connected and subscribed", category: "Coinbase")
 
         // Start receiving messages
         await receiveMessages()
@@ -110,12 +120,18 @@ actor CoinbaseWebSocketService {
 
         let subscription = CoinbaseSubscription(productIds: productIds)
         guard let data = try? JSONEncoder().encode(subscription),
-              let jsonString = String(data: data, encoding: .utf8) else { return }
+              let jsonString = String(data: data, encoding: .utf8) else {
+            AppLogger.log("Failed to encode subscription", category: "Coinbase")
+            return
+        }
+
+        AppLogger.log("Sending subscription JSON: \(jsonString)", category: "Coinbase")
 
         do {
             try await webSocketTask?.send(.string(jsonString))
+            AppLogger.log("Subscription sent successfully", category: "Coinbase")
         } catch {
-            print("Failed to send subscription: \(error)")
+            AppLogger.log("Failed to send subscription: \(error)", category: "Coinbase")
         }
     }
 
@@ -129,7 +145,7 @@ actor CoinbaseWebSocketService {
         do {
             try await webSocketTask?.send(.string(jsonString))
         } catch {
-            print("Failed to send unsubscription: \(error)")
+            AppLogger.log("Failed to send unsubscription: \(error)", category: "Coinbase")
         }
     }
 
@@ -159,19 +175,26 @@ actor CoinbaseWebSocketService {
     private func handleMessage(_ text: String) {
         guard let data = text.data(using: .utf8),
               let message = try? JSONDecoder().decode(CoinbaseMessage.self, from: data) else {
+            AppLogger.log("Failed to decode message: \(text.prefix(100))", category: "Coinbase")
             return
         }
 
-        guard message.type == "ticker",
-              let productId = message.productId,
-              let priceString = message.price,
-              let price = Double(priceString),
-              let open24hString = message.open24h,
-              let open24h = Double(open24hString) else {
-            return
-        }
+        // Only log ticker messages, skip subscriptions/heartbeat
+        if message.type == "ticker" {
+            guard let productId = message.productId,
+                  let priceString = message.price,
+                  let price = Double(priceString),
+                  let open24hString = message.open24h,
+                  let open24h = Double(open24hString) else {
+                AppLogger.log("Ticker message missing fields: \(message.type)", category: "Coinbase")
+                return
+            }
 
-        priceSubject.send((productId: productId, price: price, open24h: open24h))
+            AppLogger.log("Price update: \(productId) = $\(price)", category: "Coinbase")
+            priceSubject.send((productId: productId, price: price, open24h: open24h))
+        } else {
+            AppLogger.log("Received message type: \(message.type)", category: "Coinbase")
+        }
     }
 
     private func handleDisconnection(error: Error) async {
@@ -198,5 +221,81 @@ actor CoinbaseWebSocketService {
     private func calculateReconnectDelay(attempt: Int) -> TimeInterval {
         let delay = baseDelay * pow(2.0, Double(attempt - 1))
         return min(delay, maxReconnectDelay)
+    }
+}
+
+// MARK: - Coinbase Models
+
+struct CoinbaseSubscription: Encodable {
+    let type = "subscribe"
+    let productIds: [String]
+    let channels: [TickerChannel]
+
+    struct TickerChannel: Encodable {
+        let name = "ticker"
+        let productIds: [String]
+
+        enum CodingKeys: String, CodingKey {
+            case name
+            case productIds = "product_ids"
+        }
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case productIds = "product_ids"
+        case channels
+    }
+
+    init(productIds: [String]) {
+        self.productIds = productIds
+        self.channels = [TickerChannel(productIds: productIds)]
+    }
+}
+
+struct CoinbaseUnsubscription: Encodable {
+    let type = "unsubscribe"
+    let productIds: [String]
+    let channels: [TickerChannel]
+
+    struct TickerChannel: Encodable {
+        let name = "ticker"
+        let productIds: [String]
+
+        enum CodingKeys: String, CodingKey {
+            case name
+            case productIds = "product_ids"
+        }
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case productIds = "product_ids"
+        case channels
+    }
+
+    init(productIds: [String]) {
+        self.productIds = productIds
+        self.channels = [TickerChannel(productIds: productIds)]
+    }
+}
+
+struct CoinbaseMessage: Decodable {
+    let type: String
+    let productId: String?
+    let price: String?
+    let open24h: String?
+    let volume24h: String?
+    let low24h: String?
+    let high24h: String?
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case productId = "product_id"
+        case price
+        case open24h = "open_24h"
+        case volume24h = "volume_24h"
+        case low24h = "low_24h"
+        case high24h = "high_24h"
     }
 }

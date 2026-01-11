@@ -8,12 +8,12 @@ final class AppState: ObservableObject {
     @Published var settingsManager: SettingsManager
     @Published var priceManager: PriceManager
 
-    @Published var showingSettings = false
-    @Published var showingSymbolList = false
     @Published var showingAddSymbol = false
+    @Published var editingSymbol: Symbol?
     @Published var errorMessage: String?
 
     private var cancellables = Set<AnyCancellable>()
+    private let alertManager = AlertManager.shared
 
     init() {
         self.symbolStore = SymbolStore()
@@ -51,13 +51,23 @@ final class AppState: ObservableObject {
     var isOffline: Bool {
         guard hasSymbols else { return false }
 
-        // Check if all prices are stale
+        // Check if we have any prices at all
+        var hasPrices = false
+        var hasNonStale = false
+
         for symbol in symbols {
-            if let price = priceManager.price(for: symbol), !price.isStale {
-                return false
+            if let price = priceManager.price(for: symbol) {
+                hasPrices = true
+                if !price.isStale {
+                    hasNonStale = true
+                    break
+                }
             }
         }
-        return true
+
+        // Only offline if we have prices but they're ALL stale
+        // If no prices yet, we're loading, not offline
+        return hasPrices && !hasNonStale
     }
 
     func price(for symbol: Symbol) -> PriceData? {
@@ -73,6 +83,10 @@ final class AppState: ObservableObject {
         }
     }
 
+    func updateSymbol(_ symbol: Symbol) {
+        symbolStore.update(symbol)
+    }
+
     func removeSymbol(_ symbol: Symbol) {
         symbolStore.remove(symbol: symbol)
         updateMonitoring()
@@ -85,6 +99,13 @@ final class AppState: ObservableObject {
     func updateSettings(_ newSettings: AppSettings) {
         settingsManager.update(newSettings)
         priceManager.updateSettings(newSettings)
+        alertManager.updateSettings(newSettings)
+    }
+
+    func resetSettings() {
+        settingsManager.resetToDefaults()
+        priceManager.updateSettings(settings)
+        alertManager.updateSettings(settings)
     }
 
     func openSymbolURL(_ symbol: Symbol) {
@@ -108,6 +129,7 @@ final class AppState: ObservableObject {
         priceManager.objectWillChange
             .sink { [weak self] _ in
                 self?.objectWillChange.send()
+                self?.checkAlerts()
             }
             .store(in: &cancellables)
     }
@@ -118,10 +140,19 @@ final class AppState: ObservableObject {
             stockSymbols: stockSymbols,
             settings: settings
         )
+        alertManager.updateSettings(settings)
     }
 
     private func updateMonitoring() {
         priceManager.updateCryptoSymbols(cryptoSymbols)
         priceManager.updateStockSymbols(stockSymbols)
+    }
+
+    private func checkAlerts() {
+        alertManager.checkAlerts(
+            for: symbols,
+            prices: priceManager.prices,
+            settings: settings
+        )
     }
 }

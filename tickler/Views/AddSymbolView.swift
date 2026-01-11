@@ -77,7 +77,7 @@ struct AddSymbolView: View {
         case .crypto:
             return Exchange.cryptoExchanges
         case .stock:
-            return Exchange.stockExchanges
+            return Exchange.stockBrokers
         }
     }
 

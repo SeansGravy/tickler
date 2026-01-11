@@ -6,8 +6,9 @@
 set -e
 
 # Configuration
-APP_NAME="tickler"
-DMG_NAME="tickler"
+SCHEME_NAME="tickler"
+APP_NAME="Tickler"
+DMG_NAME="Tickler"
 BUILD_DIR="build"
 DMG_DIR="${BUILD_DIR}/dmg"
 DMG_PATH="${BUILD_DIR}/${DMG_NAME}.dmg"
@@ -27,7 +28,7 @@ rm -rf "${DMG_DIR}"
 rm -f "${DMG_PATH}"
 
 # Build the app
-xcodebuild -scheme "${APP_NAME}" \
+xcodebuild -scheme "${SCHEME_NAME}" \
     -configuration Release \
     -derivedDataPath "${BUILD_DIR}/DerivedData" \
     -destination 'platform=macOS' \

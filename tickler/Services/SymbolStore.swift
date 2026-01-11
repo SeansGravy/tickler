@@ -8,7 +8,7 @@ enum SymbolStoreError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .symbolLimitReached:
-            return "Maximum of 256 symbols reached"
+            return "Maximum of 277 symbols reached"
         case .duplicateSymbol(let ticker):
             return "Symbol '\(ticker)' already exists"
         }
@@ -18,9 +18,10 @@ enum SymbolStoreError: LocalizedError {
 @MainActor
 final class SymbolStore: ObservableObject {
     @Published private(set) var symbols: [Symbol] = []
+    @Published var searchText: String = ""
 
     private let fileURL: URL
-    private let maxSymbols = 256
+    private let maxSymbols = 277  // Fibonacci number
 
     init() {
         let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
@@ -41,6 +42,18 @@ final class SymbolStore: ObservableObject {
         symbols.filter { $0.type == .stock }.sorted { $0.sortOrder < $1.sortOrder }
     }
 
+    var filteredSymbols: [Symbol] {
+        let sorted = symbols.sorted { $0.sortOrder < $1.sortOrder }
+        if searchText.isEmpty {
+            return sorted
+        }
+        let search = searchText.lowercased()
+        return sorted.filter {
+            $0.ticker.lowercased().contains(search) ||
+            $0.displayName.lowercased().contains(search)
+        }
+    }
+
     var canAddMore: Bool {
         symbols.count < maxSymbols
     }
@@ -51,6 +64,10 @@ final class SymbolStore: ObservableObject {
 
     func topSymbols(count: Int) -> [Symbol] {
         Array(symbols.sorted { $0.sortOrder < $1.sortOrder }.prefix(count))
+    }
+
+    func symbol(withId id: UUID) -> Symbol? {
+        symbols.first { $0.id == id }
     }
 
     func add(_ symbol: Symbol) throws {
@@ -67,6 +84,13 @@ final class SymbolStore: ObservableObject {
         newSymbol.sortOrder = symbols.count
         symbols.append(newSymbol)
         save()
+    }
+
+    func update(_ symbol: Symbol) {
+        if let index = symbols.firstIndex(where: { $0.id == symbol.id }) {
+            symbols[index] = symbol
+            save()
+        }
     }
 
     func remove(at offsets: IndexSet) {
@@ -132,9 +156,9 @@ final class SymbolStore: ObservableObject {
             Symbol(ticker: "ETH", displayName: "Ethereum", type: .crypto, exchange: .coinbase, sortOrder: 1),
             Symbol(ticker: "BTC", displayName: "Bitcoin", type: .crypto, exchange: .coinbase, sortOrder: 2),
             Symbol(ticker: "SOL", displayName: "Solana", type: .crypto, exchange: .coinbase, sortOrder: 3),
-            Symbol(ticker: "TSLA", displayName: "Tesla", type: .stock, exchange: .alpaca, sortOrder: 4),
-            Symbol(ticker: "NVDA", displayName: "NVIDIA", type: .stock, exchange: .alpaca, sortOrder: 5),
-            Symbol(ticker: "AAPL", displayName: "Apple", type: .stock, exchange: .alpaca, sortOrder: 6),
+            Symbol(ticker: "TSLA", displayName: "Tesla", type: .stock, exchange: .yahoo, sortOrder: 4),
+            Symbol(ticker: "NVDA", displayName: "NVIDIA", type: .stock, exchange: .yahoo, sortOrder: 5),
+            Symbol(ticker: "AAPL", displayName: "Apple", type: .stock, exchange: .yahoo, sortOrder: 6),
         ]
     }
 

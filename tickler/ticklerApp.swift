@@ -13,10 +13,11 @@ struct ticklerApp: App {
         }
         .menuBarExtraStyle(.window)
 
-        Settings {
+        Window("Settings", id: "settings") {
             SettingsView()
                 .environmentObject(appState)
         }
+        .windowResizability(.contentSize)
 
         Window("Manage Symbols", id: "symbols") {
             SymbolListView()

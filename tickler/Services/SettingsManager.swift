@@ -27,41 +27,8 @@ final class SettingsManager: ObservableObject {
         syncLaunchAtLogin()
     }
 
-    func updateMenuBarDisplayCount(_ count: Int) {
-        var updated = settings
-        updated.menuBarDisplayCount = max(1, min(10, count))
-        update(updated)
-    }
-
-    func updateDefaultCryptoExchange(_ exchange: Exchange) {
-        var updated = settings
-        updated.defaultCryptoExchange = exchange
-        update(updated)
-    }
-
-    func updateDefaultStockBroker(_ exchange: Exchange) {
-        var updated = settings
-        updated.defaultStockBroker = exchange
-        update(updated)
-    }
-
-    func updateLaunchAtLogin(_ enabled: Bool) {
-        var updated = settings
-        updated.launchAtLogin = enabled
-        update(updated)
-    }
-
-    func updateStreamingEnabled(_ enabled: Bool) {
-        var updated = settings
-        updated.streamingEnabled = enabled
-        update(updated)
-    }
-
-    func updateAlpacaCredentials(apiKey: String, secret: String) {
-        var updated = settings
-        updated.alpacaAPIKey = apiKey
-        updated.alpacaAPISecret = secret
-        update(updated)
+    func resetToDefaults() {
+        update(.default)
     }
 
     private func save() {

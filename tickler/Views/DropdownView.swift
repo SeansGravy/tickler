@@ -17,7 +17,7 @@ struct DropdownView: View {
 
             menuButtons
         }
-        .frame(width: 280)
+        .frame(width: 300)
         .padding(.vertical, 8)
     }
 
@@ -27,10 +27,14 @@ struct DropdownView: View {
                 SectionHeaderView(title: "CRYPTO")
 
                 ForEach(appState.cryptoSymbols) { symbol in
-                    SymbolRowView(symbol: symbol, price: appState.price(for: symbol))
-                        .onTapGesture {
-                            appState.openSymbolURL(symbol)
-                        }
+                    SymbolRowView(
+                        symbol: symbol,
+                        price: appState.price(for: symbol),
+                        settings: appState.settings
+                    )
+                    .onTapGesture {
+                        appState.openSymbolURL(symbol)
+                    }
                 }
             }
 
@@ -42,22 +46,14 @@ struct DropdownView: View {
 
                 SectionHeaderView(title: "STOCKS")
 
-                if !appState.settings.hasAlpacaCredentials {
-                    HStack {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundColor(.orange)
-                        Text("Configure API key in Settings")
-                            .foregroundColor(.secondary)
-                            .font(.caption)
-                    }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 4)
-                } else {
-                    ForEach(appState.stockSymbols) { symbol in
-                        SymbolRowView(symbol: symbol, price: appState.price(for: symbol))
-                            .onTapGesture {
-                                appState.openSymbolURL(symbol)
-                            }
+                ForEach(appState.stockSymbols) { symbol in
+                    SymbolRowView(
+                        symbol: symbol,
+                        price: appState.price(for: symbol),
+                        settings: appState.settings
+                    )
+                    .onTapGesture {
+                        appState.openSymbolURL(symbol)
                     }
                 }
             }
@@ -69,28 +65,32 @@ struct DropdownView: View {
             MenuButton(icon: "gearshape", title: "Settings...") {
                 openSettingsWindow()
             }
-            .keyboardShortcut(",", modifiers: .command)
 
             MenuButton(icon: "pencil", title: "Edit Symbols...") {
-                appState.showingSymbolList = true
+                openSymbolsWindow()
             }
 
             Divider()
                 .padding(.vertical, 4)
 
-            MenuButton(icon: "xmark.circle", title: "Quit tickler") {
+            MenuButton(icon: "xmark.circle", title: "Quit Tickler") {
                 NSApplication.shared.terminate(nil)
             }
-            .keyboardShortcut("q", modifiers: .command)
         }
     }
 
     private func openSettingsWindow() {
-        NSApp.activate(ignoringOtherApps: true)
-        if #available(macOS 14, *) {
-            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-        } else {
-            NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            NSApp.activate(ignoringOtherApps: true)
+            openWindow(id: "settings")
+        }
+    }
+
+    private func openSymbolsWindow() {
+        // Delay to let the popover close first
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            NSApp.activate(ignoringOtherApps: true)
+            openWindow(id: "symbols")
         }
     }
 }
@@ -111,12 +111,19 @@ struct SectionHeaderView: View {
 struct SymbolRowView: View {
     let symbol: Symbol
     let price: PriceData?
+    let settings: AppSettings
 
     var body: some View {
         HStack {
             Text(symbol.ticker)
                 .fontWeight(.medium)
                 .frame(width: 50, alignment: .leading)
+
+            if symbol.hasActiveAlerts {
+                Image(systemName: "bell.fill")
+                    .font(.caption2)
+                    .foregroundColor(.orange)
+            }
 
             Spacer()
 
@@ -131,14 +138,14 @@ struct SymbolRowView: View {
 
                 Text(PriceFormatter.formatPercentChange(price.percentChange24h))
                     .foregroundColor(price.percentChange24h >= 0 ? .green : .red)
-                    .frame(width: 60, alignment: .trailing)
+                    .frame(width: 70, alignment: .trailing)
             } else {
                 Text("--")
                     .foregroundColor(.secondary)
                     .frame(width: 100, alignment: .trailing)
                 Text("--")
                     .foregroundColor(.secondary)
-                    .frame(width: 60, alignment: .trailing)
+                    .frame(width: 70, alignment: .trailing)
             }
         }
         .font(.system(.body, design: .monospaced))
@@ -179,6 +186,7 @@ struct MenuButton: View {
 
 struct EmptyStateView: View {
     @EnvironmentObject var appState: AppState
+    @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         VStack(spacing: 12) {
@@ -192,7 +200,10 @@ struct EmptyStateView: View {
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
             Button("Add Symbol") {
-                appState.showingAddSymbol = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    NSApp.activate(ignoringOtherApps: true)
+                    openWindow(id: "symbols")
+                }
             }
             .buttonStyle(.borderedProminent)
         }
