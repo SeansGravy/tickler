@@ -1,0 +1,42 @@
+name: tickler
+options:
+  bundleIdPrefix: com.seansgravy
+  deploymentTarget:
+    macOS: "13.0"
+  xcodeVersion: "15.0"
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.9"
+    MACOSX_DEPLOYMENT_TARGET: "13.0"
+
+targets:
+  tickler:
+    type: application
+    platform: macOS
+    sources:
+      - path: tickler
+        excludes:
+          - "**/*.plist"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.seansgravy.tickler
+        INFOPLIST_FILE: tickler/Resources/Info.plist
+        PRODUCT_NAME: tickler
+        CODE_SIGN_STYLE: Automatic
+        ENABLE_HARDENED_RUNTIME: YES
+        COMBINE_HIDPI_IMAGES: YES
+    info:
+      path: tickler/Resources/Info.plist
+      properties:
+        LSUIElement: true
+        CFBundleDisplayName: tickler
+        NSHighResolutionCapable: true
+    entitlements:
+      path: tickler/Resources/tickler.entitlements
+      properties:
+        com.apple.security.app-sandbox: false
+        com.apple.security.network.client: true

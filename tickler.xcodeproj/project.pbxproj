@@ -1,0 +1,422 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1C5D1225647E727D21487DC7 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FF9D33982B0D15B1B30078 /* AppState.swift */; };
+		2351747489A8C2D2B681998B /* PriceFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C85894C063587022BAB9E3F /* PriceFormatter.swift */; };
+		2F4ECF89B09FBBEB161D7E74 /* SymbolStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2EE1E17B1470CAC24BC7E4 /* SymbolStore.swift */; };
+		3C752C84DE22DD78174462E1 /* PriceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA791811A6716838293C406B /* PriceManager.swift */; };
+		3D8473965D50FD894246EB0F /* SymbolListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7B3AA2A6D19671312848F8 /* SymbolListView.swift */; };
+		60417C6A1BD3431ED1EEDEE4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C5794149170C9885C59D54F /* Assets.xcassets */; };
+		730C40EFBD4C4BA66955D3F8 /* PriceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7FA40867D2EF5E2BCC7BA8 /* PriceData.swift */; };
+		7D183C8E0EA43FBB6B828C10 /* DropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5CE71FFB71DAEF503F5E218 /* DropdownView.swift */; };
+		994705DE48DC0DDFA7747523 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3C78B124BCA1C4CF2F863B /* AppSettings.swift */; };
+		A595EADAE60AC641E6D6360D /* LaunchAtLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 467C6E3806529AFBF7F3E26F /* LaunchAtLogin.swift */; };
+		A6CE55FDED2DC4E0504F36DC /* CoinbaseWebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18A7CA354D9C9B92B43CCE0 /* CoinbaseWebSocket.swift */; };
+		C63D849B462E863F49D23C5C /* Symbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9B887FC74A1ED56202E775 /* Symbol.swift */; };
+		E745392C45120EF2C0FA5F90 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB61D01AE0F3930BECDBCD3 /* MenuBarView.swift */; };
+		EEBB74CD4C7E25AE0EE676A0 /* ticklerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86A49CD53BA43FB14469690 /* ticklerApp.swift */; };
+		EFAB2CBA54DA9BE43FE3AFC4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FD0D0FDE66C5C80C24C323 /* SettingsView.swift */; };
+		F6904FB7EC15F2A4D5696C1B /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82EB643683BD10D5DEF13B41 /* SettingsManager.swift */; };
+		F79851F85281B18DE656184D /* AlpacaAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3313B7387507173819E7CCF0 /* AlpacaAPI.swift */; };
+		F8B08499BF13629F2E14A630 /* AddSymbolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A945DCFDD4B978B10FFB8567 /* AddSymbolView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0C7B3AA2A6D19671312848F8 /* SymbolListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolListView.swift; sourceTree = "<group>"; };
+		3313B7387507173819E7CCF0 /* AlpacaAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlpacaAPI.swift; sourceTree = "<group>"; };
+		3B3C78B124BCA1C4CF2F863B /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		3C5794149170C9885C59D54F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		467C6E3806529AFBF7F3E26F /* LaunchAtLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLogin.swift; sourceTree = "<group>"; };
+		4C85894C063587022BAB9E3F /* PriceFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceFormatter.swift; sourceTree = "<group>"; };
+		61FF9D33982B0D15B1B30078 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		7E2EE1E17B1470CAC24BC7E4 /* SymbolStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolStore.swift; sourceTree = "<group>"; };
+		82EB643683BD10D5DEF13B41 /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
+		83FD0D0FDE66C5C80C24C323 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		9E40D1A03E87A57E1CC561E4 /* tickler.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = tickler.entitlements; sourceTree = "<group>"; };
+		9F8E6CD63DF1312CA7A6FDA2 /* tickler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tickler.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A945DCFDD4B978B10FFB8567 /* AddSymbolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSymbolView.swift; sourceTree = "<group>"; };
+		B86A49CD53BA43FB14469690 /* ticklerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ticklerApp.swift; sourceTree = "<group>"; };
+		BB7FA40867D2EF5E2BCC7BA8 /* PriceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceData.swift; sourceTree = "<group>"; };
+		CCB61D01AE0F3930BECDBCD3 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		D18A7CA354D9C9B92B43CCE0 /* CoinbaseWebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinbaseWebSocket.swift; sourceTree = "<group>"; };
+		DA791811A6716838293C406B /* PriceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceManager.swift; sourceTree = "<group>"; };
+		DC9B887FC74A1ED56202E775 /* Symbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbol.swift; sourceTree = "<group>"; };
+		F5CE71FFB71DAEF503F5E218 /* DropdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		2ACBDFC7F66D47AAF9650EB1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3B3C78B124BCA1C4CF2F863B /* AppSettings.swift */,
+				BB7FA40867D2EF5E2BCC7BA8 /* PriceData.swift */,
+				DC9B887FC74A1ED56202E775 /* Symbol.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		347AF1470B121E1E04CC183B /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				467C6E3806529AFBF7F3E26F /* LaunchAtLogin.swift */,
+				4C85894C063587022BAB9E3F /* PriceFormatter.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		408FF9B00913D487ADE4AAFC = {
+			isa = PBXGroup;
+			children = (
+				DCBB9D8624BE8F4985C6D86A /* tickler */,
+				92E1A76DD063255542AAD8D2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7F2FFAE3CEB7CEEDF9D42BDF /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				61FF9D33982B0D15B1B30078 /* AppState.swift */,
+				DA791811A6716838293C406B /* PriceManager.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		92E1A76DD063255542AAD8D2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9F8E6CD63DF1312CA7A6FDA2 /* tickler.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A2BF15DDAE9C0801F2ED3298 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A945DCFDD4B978B10FFB8567 /* AddSymbolView.swift */,
+				F5CE71FFB71DAEF503F5E218 /* DropdownView.swift */,
+				CCB61D01AE0F3930BECDBCD3 /* MenuBarView.swift */,
+				83FD0D0FDE66C5C80C24C323 /* SettingsView.swift */,
+				0C7B3AA2A6D19671312848F8 /* SymbolListView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		CA35FCF432D1A4ABCF096A18 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				3C5794149170C9885C59D54F /* Assets.xcassets */,
+				9E40D1A03E87A57E1CC561E4 /* tickler.entitlements */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		DCBB9D8624BE8F4985C6D86A /* tickler */ = {
+			isa = PBXGroup;
+			children = (
+				B86A49CD53BA43FB14469690 /* ticklerApp.swift */,
+				2ACBDFC7F66D47AAF9650EB1 /* Models */,
+				CA35FCF432D1A4ABCF096A18 /* Resources */,
+				E739CFC5DF8F32A1A6627FBE /* Services */,
+				347AF1470B121E1E04CC183B /* Utilities */,
+				7F2FFAE3CEB7CEEDF9D42BDF /* ViewModels */,
+				A2BF15DDAE9C0801F2ED3298 /* Views */,
+			);
+			path = tickler;
+			sourceTree = "<group>";
+		};
+		E739CFC5DF8F32A1A6627FBE /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				3313B7387507173819E7CCF0 /* AlpacaAPI.swift */,
+				D18A7CA354D9C9B92B43CCE0 /* CoinbaseWebSocket.swift */,
+				82EB643683BD10D5DEF13B41 /* SettingsManager.swift */,
+				7E2EE1E17B1470CAC24BC7E4 /* SymbolStore.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1160F369726104BB7BDB4C35 /* tickler */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E999878C8572E2194601B533 /* Build configuration list for PBXNativeTarget "tickler" */;
+			buildPhases = (
+				C8D7FE81312D6AF285E88C69 /* Sources */,
+				EEC419408382D6BDAC5E2EEC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = tickler;
+			packageProductDependencies = (
+			);
+			productName = tickler;
+			productReference = 9F8E6CD63DF1312CA7A6FDA2 /* tickler.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3E4072B6DC4D9DC27ED2786F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					1160F369726104BB7BDB4C35 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 92C8AFA54C4E03E6369EE01F /* Build configuration list for PBXProject "tickler" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 408FF9B00913D487ADE4AAFC;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1160F369726104BB7BDB4C35 /* tickler */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EEC419408382D6BDAC5E2EEC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				60417C6A1BD3431ED1EEDEE4 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C8D7FE81312D6AF285E88C69 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F8B08499BF13629F2E14A630 /* AddSymbolView.swift in Sources */,
+				F79851F85281B18DE656184D /* AlpacaAPI.swift in Sources */,
+				994705DE48DC0DDFA7747523 /* AppSettings.swift in Sources */,
+				1C5D1225647E727D21487DC7 /* AppState.swift in Sources */,
+				A6CE55FDED2DC4E0504F36DC /* CoinbaseWebSocket.swift in Sources */,
+				7D183C8E0EA43FBB6B828C10 /* DropdownView.swift in Sources */,
+				A595EADAE60AC641E6D6360D /* LaunchAtLogin.swift in Sources */,
+				E745392C45120EF2C0FA5F90 /* MenuBarView.swift in Sources */,
+				730C40EFBD4C4BA66955D3F8 /* PriceData.swift in Sources */,
+				2351747489A8C2D2B681998B /* PriceFormatter.swift in Sources */,
+				3C752C84DE22DD78174462E1 /* PriceManager.swift in Sources */,
+				F6904FB7EC15F2A4D5696C1B /* SettingsManager.swift in Sources */,
+				EFAB2CBA54DA9BE43FE3AFC4 /* SettingsView.swift in Sources */,
+				C63D849B462E863F49D23C5C /* Symbol.swift in Sources */,
+				3D8473965D50FD894246EB0F /* SymbolListView.swift in Sources */,
+				2F4ECF89B09FBBEB161D7E74 /* SymbolStore.swift in Sources */,
+				EEBB74CD4C7E25AE0EE676A0 /* ticklerApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		578602C4508437CE6417A42B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = tickler/Resources/tickler.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = tickler/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.seansgravy.tickler;
+				PRODUCT_NAME = tickler;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		62077A8BAA202CDFD1DD00A7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		9D4785C7DF0B8386752E47DC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		D8A24356AEABECD82320C1D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = tickler/Resources/tickler.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = tickler/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.seansgravy.tickler;
+				PRODUCT_NAME = tickler;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		92C8AFA54C4E03E6369EE01F /* Build configuration list for PBXProject "tickler" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				62077A8BAA202CDFD1DD00A7 /* Debug */,
+				9D4785C7DF0B8386752E47DC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E999878C8572E2194601B533 /* Build configuration list for PBXNativeTarget "tickler" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				578602C4508437CE6417A42B /* Debug */,
+				D8A24356AEABECD82320C1D9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3E4072B6DC4D9DC27ED2786F /* Project object */;
+}
