@@ -6,144 +6,160 @@ struct EditSymbolView: View {
 
     let symbol: Symbol
 
-    @State private var displayName: String = ""
-    @State private var exchange: Exchange = .coinbase
+    @State private var ticker: String
+    @State private var displayName: String
+    @State private var type: SymbolType
+    @State private var exchange: Exchange
+    @State private var group: String
+    @State private var tradingPlatformOverride: TradingPlatform?
+    @State private var useDefaultPlatform: Bool
 
-    @State private var alertEnabled: Bool = false
-    @State private var alertAbovePrice: String = ""
-    @State private var alertBelowPrice: String = ""
-    @State private var alertPercentChange: String = ""
+    // Alerts
+    @State private var alertEnabled: Bool
+    @State private var alertAbovePrice: String
+    @State private var alertBelowPrice: String
+    @State private var alertPercentChange: String
+
+    init(symbol: Symbol) {
+        self.symbol = symbol
+        _ticker = State(initialValue: symbol.ticker)
+        _displayName = State(initialValue: symbol.displayName)
+        _type = State(initialValue: symbol.type)
+        _exchange = State(initialValue: symbol.exchange)
+        _group = State(initialValue: symbol.group ?? "")
+        _tradingPlatformOverride = State(initialValue: symbol.tradingPlatformOverride)
+        _useDefaultPlatform = State(initialValue: symbol.tradingPlatformOverride == nil)
+        _alertEnabled = State(initialValue: symbol.alertEnabled)
+        _alertAbovePrice = State(initialValue: symbol.alertAbovePrice.map { String($0) } ?? "")
+        _alertBelowPrice = State(initialValue: symbol.alertBelowPrice.map { String($0) } ?? "")
+        _alertPercentChange = State(initialValue: symbol.alertPercentChange.map { String($0) } ?? "")
+    }
 
     var body: some View {
         VStack(spacing: 0) {
-            headerView
+            // Header
+            HStack {
+                Text("Edit Symbol")
+                    .font(.headline)
+                Spacer()
+                Button("Cancel") {
+                    dismiss()
+                }
+                .keyboardShortcut(.cancelAction)
+
+                Button("Save") {
+                    saveSymbol()
+                }
+                .keyboardShortcut(.defaultAction)
+                .disabled(ticker.isEmpty || displayName.isEmpty)
+            }
+            .padding()
+
+            Divider()
 
             Form {
-                Section("Symbol Details") {
-                    HStack {
-                        Text("Ticker")
-                            .foregroundColor(.secondary)
-                        Spacer()
-                        Text(symbol.ticker)
-                            .fontWeight(.medium)
-                    }
-
-                    HStack {
-                        Text("Type")
-                            .foregroundColor(.secondary)
-                        Spacer()
-                        Text(symbol.type == .crypto ? "Cryptocurrency" : "Stock")
-                    }
-
-                    TextField("Display Name", text: $displayName)
-
-                    Picker("Exchange/Broker", selection: $exchange) {
-                        if symbol.type == .crypto {
-                            ForEach(Exchange.cryptoExchanges, id: \.self) { ex in
-                                Text(ex.displayName).tag(ex)
-                            }
-                        } else {
-                            ForEach(Exchange.stockBrokers, id: \.self) { broker in
-                                Text(broker.displayName).tag(broker)
-                            }
-                        }
-                    }
-                    .pickerStyle(.menu)
-                }
-
-                Section("Price Alerts") {
-                    Toggle("Enable alerts for this symbol", isOn: $alertEnabled)
-
-                    if alertEnabled {
-                        HStack {
-                            Text("Alert above $")
-                            TextField("Price", text: $alertAbovePrice)
-                                .textFieldStyle(.roundedBorder)
-                                .frame(width: 100)
-                        }
-
-                        HStack {
-                            Text("Alert below $")
-                            TextField("Price", text: $alertBelowPrice)
-                                .textFieldStyle(.roundedBorder)
-                                .frame(width: 100)
-                        }
-
-                        HStack {
-                            Text("Alert on % change")
-                            TextField("Percent", text: $alertPercentChange)
-                                .textFieldStyle(.roundedBorder)
-                                .frame(width: 60)
-                            Text("%")
-                        }
-
-                        Text("You'll be notified when the price crosses these thresholds")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                }
+                basicInfoSection
+                tradingSection
+                alertsSection
             }
             .formStyle(.grouped)
-
-            footerView
         }
-        .frame(width: 400, height: 450)
-        .onAppear {
-            loadSymbolData()
-        }
+        .frame(width: 400, height: 500)
     }
 
-    private var headerView: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("Edit \(symbol.ticker)")
-                .font(.headline)
-            Text("Modify symbol settings and alerts")
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(Color(NSColor.windowBackgroundColor))
-    }
+    private var basicInfoSection: some View {
+        Section("Basic Info") {
+            TextField("Ticker", text: $ticker)
+                .textCase(.uppercase)
+                .disabled(true) // Can't change ticker on edit
 
-    private var footerView: some View {
-        HStack {
-            Button("Cancel") {
-                dismiss()
+            TextField("Display Name", text: $displayName)
+
+            Picker("Type", selection: $type) {
+                Text("Crypto").tag(SymbolType.crypto)
+                Text("Stock").tag(SymbolType.stock)
             }
-            .keyboardShortcut(.cancelAction)
+            .disabled(true) // Can't change type on edit
 
-            Spacer()
-
-            Button("Save") {
-                saveChanges()
-                dismiss()
+            Picker("Exchange", selection: $exchange) {
+                if type == .crypto {
+                    ForEach(Exchange.cryptoExchanges, id: \.self) { ex in
+                        Text(ex.displayName).tag(ex)
+                    }
+                } else {
+                    ForEach(Exchange.stockBrokers, id: \.self) { ex in
+                        Text(ex.displayName).tag(ex)
+                    }
+                }
             }
-            .keyboardShortcut(.defaultAction)
-            .buttonStyle(.borderedProminent)
+
+            TextField("Group (optional)", text: $group)
         }
-        .padding()
-        .background(Color(NSColor.windowBackgroundColor))
     }
 
-    private func loadSymbolData() {
-        displayName = symbol.displayName
-        exchange = symbol.exchange
-        alertEnabled = symbol.alertEnabled
-        alertAbovePrice = symbol.alertAbovePrice.map { String($0) } ?? ""
-        alertBelowPrice = symbol.alertBelowPrice.map { String($0) } ?? ""
-        alertPercentChange = symbol.alertPercentChange.map { String($0) } ?? ""
+    private var tradingSection: some View {
+        Section("Trading Platform") {
+            Toggle("Use default platform", isOn: $useDefaultPlatform)
+
+            if !useDefaultPlatform {
+                Picker("Open in", selection: $tradingPlatformOverride) {
+                    Text("None").tag(nil as TradingPlatform?)
+                    ForEach(TradingPlatform.allCases, id: \.self) { platform in
+                        Text(platform.displayName).tag(platform as TradingPlatform?)
+                    }
+                }
+            }
+        }
     }
 
-    private func saveChanges() {
+    private var alertsSection: some View {
+        Section("Alerts") {
+            Toggle("Enable alerts for this symbol", isOn: $alertEnabled)
+
+            if alertEnabled {
+                HStack {
+                    Text("Alert when price above:")
+                    Spacer()
+                    TextField("Price", text: $alertAbovePrice)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(width: 100)
+                }
+
+                HStack {
+                    Text("Alert when price below:")
+                    Spacer()
+                    TextField("Price", text: $alertBelowPrice)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(width: 100)
+                }
+
+                HStack {
+                    Text("Alert on % change ±:")
+                    Spacer()
+                    TextField("%", text: $alertPercentChange)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(width: 100)
+                }
+
+                Text("Leave fields empty to disable that alert type")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
+
+    private func saveSymbol() {
         var updatedSymbol = symbol
-        updatedSymbol.displayName = displayName.isEmpty ? symbol.ticker : displayName
+        updatedSymbol.displayName = displayName
         updatedSymbol.exchange = exchange
+        updatedSymbol.group = group.isEmpty ? nil : group
+        updatedSymbol.tradingPlatformOverride = useDefaultPlatform ? nil : tradingPlatformOverride
         updatedSymbol.alertEnabled = alertEnabled
         updatedSymbol.alertAbovePrice = Double(alertAbovePrice)
         updatedSymbol.alertBelowPrice = Double(alertBelowPrice)
         updatedSymbol.alertPercentChange = Double(alertPercentChange)
 
         appState.updateSymbol(updatedSymbol)
+        dismiss()
     }
 }

@@ -1,90 +1,71 @@
 import Foundation
 import UserNotifications
-import AppKit
 
 @MainActor
 final class AlertManager: ObservableObject {
-    private var lastAlertTimes: [UUID: Date] = [:]
-    private var cooldownInterval: TimeInterval = 3600  // 1 hour default
-    private var notificationStyle: NotificationStyle = .banner
-
     static let shared = AlertManager()
 
+    private var lastAlertTime: [UUID: Date] = [:]
+    private var cooldownInterval: TimeInterval = 3600
+
     private init() {
-        requestNotificationPermission()
+        requestPermission()
     }
 
-    func updateSettings(_ settings: AppSettings) {
-        cooldownInterval = TimeInterval(settings.alertCooldown.rawValue)
-        notificationStyle = settings.notificationStyle
+    func checkAlerts(symbol: Symbol, price: PriceData, settings: AppSettings) {
+        guard symbol.alertEnabled else { return }
+        guard canAlert(for: symbol.id) else { return }
+
+        var triggered = false
+        var message = ""
+
+        if let above = symbol.alertAbovePrice, price.price >= above {
+            triggered = true
+            message = "\(symbol.ticker) above \(formatPrice(above)): now \(formatPrice(price.price))"
+        }
+
+        if let below = symbol.alertBelowPrice, price.price <= below {
+            triggered = true
+            message = "\(symbol.ticker) below \(formatPrice(below)): now \(formatPrice(price.price))"
+        }
+
+        if let pct = symbol.alertPercentChange, abs(price.percentChange24h) >= pct {
+            triggered = true
+            let direction = price.percentChange24h >= 0 ? "up" : "down"
+            message = "\(symbol.ticker) \(direction) \(String(format: "%.1f", abs(price.percentChange24h)))%"
+        }
+
+        if triggered {
+            sendNotification(title: "Tickler Alert", body: message, settings: settings)
+            lastAlertTime[symbol.id] = Date()
+        }
     }
 
     func checkAlerts(for symbols: [Symbol], prices: [String: PriceData], settings: AppSettings) {
         guard settings.alertsEnabled else { return }
 
-        for symbol in symbols {
-            guard symbol.alertEnabled else { continue }
-
-            let key = symbol.type == .crypto ? symbol.productId : symbol.ticker
-            guard let priceData = prices[key] else { continue }
-
-            if shouldTriggerAlert(for: symbol, price: priceData) {
-                triggerAlert(for: symbol, price: priceData)
+        for symbol in symbols where symbol.alertEnabled {
+            let key = symbol.type == .crypto ? symbol.productId(for: settings.displayCurrency) : symbol.ticker
+            if let price = prices[key] {
+                checkAlerts(symbol: symbol, price: price, settings: settings)
             }
         }
     }
 
-    private func shouldTriggerAlert(for symbol: Symbol, price: PriceData) -> Bool {
-        // Check cooldown
-        if let lastAlert = lastAlertTimes[symbol.id] {
-            if Date().timeIntervalSince(lastAlert) < cooldownInterval {
-                return false
-            }
-        }
-
-        // Check price thresholds
-        if let abovePrice = symbol.alertAbovePrice, price.price >= abovePrice {
-            return true
-        }
-
-        if let belowPrice = symbol.alertBelowPrice, price.price <= belowPrice {
-            return true
-        }
-
-        // Check percent change threshold
-        if let percentThreshold = symbol.alertPercentChange {
-            if abs(price.percentChange24h) >= percentThreshold {
-                return true
-            }
-        }
-
-        return false
+    private func canAlert(for symbolId: UUID) -> Bool {
+        guard let last = lastAlertTime[symbolId] else { return true }
+        return Date().timeIntervalSince(last) >= cooldownInterval
     }
 
-    private func triggerAlert(for symbol: Symbol, price: PriceData) {
-        lastAlertTimes[symbol.id] = Date()
-
-        let title = "\(symbol.ticker) Alert"
-        var body = "\(symbol.displayName): \(PriceFormatter.formatFull(price.price))"
-
-        if let abovePrice = symbol.alertAbovePrice, price.price >= abovePrice {
-            body += " (above $\(String(format: "%.2f", abovePrice)))"
-        } else if let belowPrice = symbol.alertBelowPrice, price.price <= belowPrice {
-            body += " (below $\(String(format: "%.2f", belowPrice)))"
-        } else if let percentThreshold = symbol.alertPercentChange {
-            body += " (\(PriceFormatter.formatPercentChange(price.percentChange24h)) threshold: ±\(String(format: "%.1f", percentThreshold))%)"
-        }
-
-        sendNotification(title: title, body: body)
-    }
-
-    private func sendNotification(title: String, body: String) {
+    private func sendNotification(title: String, body: String, settings: AppSettings) {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
 
-        switch notificationStyle {
-        case .sound, .both:
+        switch settings.notificationStyle {
+        case .sound:
+            content.sound = .default
+        case .both:
             content.sound = .default
         case .banner:
             break
@@ -98,24 +79,29 @@ final class AlertManager: ObservableObject {
 
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
-                print("Failed to send notification: \(error)")
+                AppLogger.log("Failed to send notification: \(error)", category: "Alerts")
             }
         }
     }
 
-    private func requestNotificationPermission() {
+    func requestPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in
             if let error = error {
-                print("Notification permission error: \(error)")
+                AppLogger.log("Notification permission error: \(error)", category: "Alerts")
+            } else if granted {
+                AppLogger.log("Notification permission granted", category: "Alerts")
             }
         }
     }
 
-    func clearAlertHistory(for symbolId: UUID) {
-        lastAlertTimes.removeValue(forKey: symbolId)
+    func updateSettings(_ settings: AppSettings) {
+        cooldownInterval = TimeInterval(settings.alertCooldown.rawValue)
     }
 
-    func clearAllAlertHistory() {
-        lastAlertTimes.removeAll()
+    private func formatPrice(_ value: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencySymbol = "$"
+        return formatter.string(from: NSNumber(value: value)) ?? "$\(value)"
     }
 }

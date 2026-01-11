@@ -52,6 +52,8 @@ struct AppSettings: Codable, Equatable {
     var showPercentChange: Bool
     var compactPrices: Bool
     var decimalPlaces: Int
+    var displayCurrency: Currency
+    var colorTheme: ColorTheme
 
     // Defaults
     var defaultCryptoExchange: Exchange
@@ -75,6 +77,8 @@ struct AppSettings: Codable, Equatable {
         showPercentChange: true,
         compactPrices: true,
         decimalPlaces: 2,
+        displayCurrency: .usd,
+        colorTheme: .greenRed,
         defaultCryptoExchange: .coinbase,
         defaultStockBroker: .yahoo,
         streamingEnabled: true,

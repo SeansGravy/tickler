@@ -5,7 +5,6 @@ struct SymbolListView: View {
     @State private var showingAddSymbol = false
     @State private var editingSymbol: Symbol?
     @State private var symbolToDelete: Symbol?
-    @State private var draggingSymbol: Symbol?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -88,6 +87,8 @@ struct SymbolListView: View {
         .padding(.bottom, 8)
     }
 
+    @State private var draggingSymbol: Symbol?
+
     private var symbolList: some View {
         List {
             ForEach(appState.symbolStore.filteredSymbols) { symbol in
@@ -96,24 +97,15 @@ struct SymbolListView: View {
                 } onDelete: {
                     confirmDelete(symbol)
                 }
-                .draggable(symbol.id.uuidString) {
-                    Text(symbol.ticker)
-                        .padding(8)
-                        .background(Color.accentColor.opacity(0.2))
-                        .cornerRadius(8)
+                .onDrag {
+                    draggingSymbol = symbol
+                    return NSItemProvider(object: symbol.id.uuidString as NSString)
                 }
-                .dropDestination(for: String.self) { items, location in
-                    guard let droppedId = items.first,
-                          let droppedUUID = UUID(uuidString: droppedId),
-                          let sourceIndex = appState.symbolStore.filteredSymbols.firstIndex(where: { $0.id == droppedUUID }),
-                          let destIndex = appState.symbolStore.filteredSymbols.firstIndex(where: { $0.id == symbol.id }) else {
-                        return false
-                    }
-                    if sourceIndex != destIndex {
-                        appState.moveSymbols(from: IndexSet(integer: sourceIndex), to: destIndex > sourceIndex ? destIndex + 1 : destIndex)
-                    }
-                    return true
-                }
+                .onDrop(of: [.text], delegate: SymbolDropDelegate(
+                    symbol: symbol,
+                    draggingSymbol: $draggingSymbol,
+                    symbolStore: appState.symbolStore
+                ))
             }
         }
         .listStyle(.plain)
@@ -236,5 +228,32 @@ struct SymbolListRow: View {
         .onTapGesture {
             onEdit()
         }
+    }
+}
+
+struct SymbolDropDelegate: DropDelegate {
+    let symbol: Symbol
+    @Binding var draggingSymbol: Symbol?
+    let symbolStore: SymbolStore
+
+    func performDrop(info: DropInfo) -> Bool {
+        draggingSymbol = nil
+        return true
+    }
+
+    func dropEntered(info: DropInfo) {
+        guard let dragging = draggingSymbol, dragging.id != symbol.id else { return }
+
+        let symbols = symbolStore.symbols
+        guard let fromIndex = symbols.firstIndex(where: { $0.id == dragging.id }),
+              let toIndex = symbols.firstIndex(where: { $0.id == symbol.id }) else { return }
+
+        if fromIndex != toIndex {
+            symbolStore.move(from: IndexSet(integer: fromIndex), to: toIndex > fromIndex ? toIndex + 1 : toIndex)
+        }
+    }
+
+    func dropUpdated(info: DropInfo) -> DropProposal? {
+        DropProposal(operation: .move)
     }
 }

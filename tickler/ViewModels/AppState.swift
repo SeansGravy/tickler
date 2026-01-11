@@ -109,7 +109,7 @@ final class AppState: ObservableObject {
     }
 
     func openSymbolURL(_ symbol: Symbol) {
-        guard let url = symbol.exchange.priceURL(for: symbol.ticker) else { return }
+        guard let url = symbol.tradingURL(currency: settings.displayCurrency) else { return }
         NSWorkspace.shared.open(url)
     }
 

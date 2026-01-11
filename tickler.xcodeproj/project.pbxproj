@@ -15,6 +15,7 @@
 		3C752C84DE22DD78174462E1 /* PriceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA791811A6716838293C406B /* PriceManager.swift */; };
 		3D8473965D50FD894246EB0F /* SymbolListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7B3AA2A6D19671312848F8 /* SymbolListView.swift */; };
 		59F2656CF2C54A107E4B4BF4 /* EditSymbolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEC897FED574C73A2641AE7 /* EditSymbolView.swift */; };
+		5B3844D93F3663E367611B0C /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A58B594DEF858DCD48EE74 /* Currency.swift */; };
 		60417C6A1BD3431ED1EEDEE4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C5794149170C9885C59D54F /* Assets.xcassets */; };
 		730C40EFBD4C4BA66955D3F8 /* PriceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7FA40867D2EF5E2BCC7BA8 /* PriceData.swift */; };
 		7C002A60143D169D0DD836C9 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D0F49C19AB73191A007AED /* Logger.swift */; };
@@ -32,6 +33,7 @@
 
 /* Begin PBXFileReference section */
 		0C7B3AA2A6D19671312848F8 /* SymbolListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolListView.swift; sourceTree = "<group>"; };
+		24A58B594DEF858DCD48EE74 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		3B3C78B124BCA1C4CF2F863B /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		3C5794149170C9885C59D54F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3EEC897FED574C73A2641AE7 /* EditSymbolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSymbolView.swift; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 			isa = PBXGroup;
 			children = (
 				3B3C78B124BCA1C4CF2F863B /* AppSettings.swift */,
+				24A58B594DEF858DCD48EE74 /* Currency.swift */,
 				BB7FA40867D2EF5E2BCC7BA8 /* PriceData.swift */,
 				DC9B887FC74A1ED56202E775 /* Symbol.swift */,
 			);
@@ -225,6 +228,7 @@
 				994705DE48DC0DDFA7747523 /* AppSettings.swift in Sources */,
 				1C5D1225647E727D21487DC7 /* AppState.swift in Sources */,
 				A6CE55FDED2DC4E0504F36DC /* CoinbaseWebSocket.swift in Sources */,
+				5B3844D93F3663E367611B0C /* Currency.swift in Sources */,
 				7D183C8E0EA43FBB6B828C10 /* DropdownView.swift in Sources */,
 				59F2656CF2C54A107E4B4BF4 /* EditSymbolView.swift in Sources */,
 				A595EADAE60AC641E6D6360D /* LaunchAtLogin.swift in Sources */,

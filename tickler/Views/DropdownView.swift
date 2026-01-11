@@ -17,7 +17,7 @@ struct DropdownView: View {
 
             menuButtons
         }
-        .frame(width: 300)
+        .frame(width: 320)
         .padding(.vertical, 8)
     }
 
@@ -87,7 +87,6 @@ struct DropdownView: View {
     }
 
     private func openSymbolsWindow() {
-        // Delay to let the popover close first
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             NSApp.activate(ignoringOtherApps: true)
             openWindow(id: "symbols")
@@ -115,37 +114,61 @@ struct SymbolRowView: View {
 
     var body: some View {
         HStack {
-            Text(symbol.ticker)
-                .fontWeight(.medium)
-                .frame(width: 50, alignment: .leading)
+            VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: 4) {
+                    Text(symbol.ticker)
+                        .fontWeight(.medium)
 
-            if symbol.hasActiveAlerts {
-                Image(systemName: "bell.fill")
-                    .font(.caption2)
-                    .foregroundColor(.orange)
+                    if symbol.hasActiveAlerts {
+                        Image(systemName: "bell.fill")
+                            .font(.caption2)
+                            .foregroundColor(.orange)
+                    }
+                }
+
+                Text(symbol.displayName)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .lineLimit(1)
             }
+            .frame(width: 80, alignment: .leading)
 
             Spacer()
 
             if let price = price {
-                if price.isStale {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundColor(.orange)
-                        .font(.caption)
-                }
-                Text(PriceFormatter.formatFull(price.price))
-                    .frame(width: 100, alignment: .trailing)
+                VStack(alignment: .trailing, spacing: 2) {
+                    HStack(spacing: 4) {
+                        if price.isStale {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(.orange)
+                                .font(.caption)
+                        }
 
-                Text(PriceFormatter.formatPercentChange(price.percentChange24h))
-                    .foregroundColor(price.percentChange24h >= 0 ? .green : .red)
-                    .frame(width: 70, alignment: .trailing)
+                        Text(PriceFormatter.format(
+                            price.price,
+                            currency: settings.displayCurrency,
+                            compact: settings.compactPrices,
+                            decimals: settings.decimalPlaces
+                        ))
+                        .fontWeight(.medium)
+                    }
+
+                    HStack(spacing: 8) {
+                        Text(PriceFormatter.formatPercentChange(price.percentChange24h))
+                            .font(.caption)
+                            .foregroundColor(PriceFormatter.changeColor(for: price.percentChange24h, theme: settings.colorTheme))
+
+                        // Show 24h high/low if available
+                        if let high = price.high24h, let low = price.low24h {
+                            Text("H:\(formatCompact(high)) L:\(formatCompact(low))")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
             } else {
                 Text("--")
                     .foregroundColor(.secondary)
-                    .frame(width: 100, alignment: .trailing)
-                Text("--")
-                    .foregroundColor(.secondary)
-                    .frame(width: 70, alignment: .trailing)
             }
         }
         .font(.system(.body, design: .monospaced))
@@ -159,6 +182,14 @@ struct SymbolRowView: View {
             } else {
                 NSCursor.pop()
             }
+        }
+    }
+
+    private func formatCompact(_ value: Double) -> String {
+        if value >= 1000 {
+            return String(format: "%.1fk", value / 1000)
+        } else {
+            return String(format: "%.0f", value)
         }
     }
 }

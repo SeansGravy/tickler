@@ -16,10 +16,13 @@ A native macOS menu bar app for tracking cryptocurrency and stock prices in real
 
 - **Real-time crypto prices** via Coinbase WebSocket
 - **Stock prices** via Yahoo Finance (no API key required)
+- **Multi-currency support** - USD, EUR, GBP, JPY, CAD, AUD, CHF, CNY
 - **Price alerts** with customizable thresholds and notifications
 - **Click-to-trade** opens your preferred broker/exchange
 - **Menu bar display** showing up to 10 symbols with compact formatting
+- **24h high/low** displayed in dropdown for each symbol
 - **Drag-to-reorder** symbol management with search
+- **Color themes** - Green/Red, Blue/Orange, Monochrome
 - **Launch at login** support
 - **Offline detection** with stale data indicators
 - **Zero API keys required** - works out of the box
@@ -102,6 +105,12 @@ Click any symbol in the dropdown to open its page on your chosen platform:
 
 Configure notification style and cooldown in Settings > Alerts.
 
+### Per-Symbol Settings
+
+When editing a symbol, you can also:
+- Set a custom trading platform override (opens in a different broker than default)
+- Add the symbol to a group for organization
+
 ### Price Formatting
 
 | Price Range | Format |
@@ -119,23 +128,29 @@ Configure notification style and cooldown in Settings > Alerts.
 
 ## Settings
 
-### Display Tab
+### Display
 - Number of symbols in menu bar (1-10)
 - Show/hide percent change
 - Compact prices ($90.5k) vs full prices ($90,468.60)
-- Decimal places for non-compact prices
+- Decimal places (0-6) for price display
+- Display currency (USD, EUR, GBP, JPY, CAD, AUD, CHF, CNY)
+- Color theme (Green/Red, Blue/Orange, Monochrome)
 
-### Data Tab
+### Defaults
+- Default crypto exchange (Coinbase, Kraken)
+- Default stock broker (Yahoo Finance, Robinhood, TradingView)
+
+### Data
 - Real-time streaming toggle for crypto
 - Stock refresh interval (15s, 30s, 1m, 5m)
 - Pause streaming on battery
 
-### Alerts Tab
+### Alerts
 - Enable/disable price alerts globally
 - Notification style (banner, sound, both)
 - Alert cooldown period (5m to 4h)
 
-### System Tab
+### System
 - Launch at login
 - Reset to defaults
 

@@ -35,25 +35,23 @@ struct MenuBarView: View {
         }
 
         if priceData.isStale {
-            return "\(symbol.ticker) ⚠️"
+            return "\(symbol.ticker) \u{26A0}"
         }
 
-        let priceStr = formatPrice(priceData.price)
+        let settings = appState.settings
+        let priceStr = PriceFormatter.format(
+            priceData.price,
+            currency: settings.displayCurrency,
+            compact: settings.compactPrices,
+            decimals: settings.decimalPlaces
+        )
 
-        if appState.settings.showPercentChange {
-            let arrow = priceData.percentChange24h >= 0 ? "▲" : "▼"
+        if settings.showPercentChange {
+            let arrow = priceData.percentChange24h >= 0 ? "\u{25B2}" : "\u{25BC}"
             let pctStr = String(format: "%.1f", abs(priceData.percentChange24h))
             return "\(symbol.ticker) \(priceStr) \(arrow)\(pctStr)%"
         } else {
             return "\(symbol.ticker) \(priceStr)"
-        }
-    }
-
-    private func formatPrice(_ value: Double) -> String {
-        if appState.settings.compactPrices {
-            return PriceFormatter.formatCompact(value)
-        } else {
-            return PriceFormatter.formatWithDecimals(value, places: appState.settings.decimalPlaces)
         }
     }
 }

@@ -24,8 +24,17 @@ enum ConnectionState: Equatable {
     }
 }
 
+struct CoinbasePriceUpdate {
+    let productId: String
+    let price: Double
+    let open24h: Double
+    let high24h: Double?
+    let low24h: Double?
+    let volume24h: Double?
+}
+
 actor CoinbaseWebSocketService {
-    private let url = URL(string: "wss://ws-feed.exchange.coinbase.com")!
+    private let baseURL = "wss://ws-feed.exchange.coinbase.com"
     private var webSocketTask: URLSessionWebSocketTask?
     private var session: URLSession
     private var reconnectAttempts = 0
@@ -33,13 +42,14 @@ actor CoinbaseWebSocketService {
     private let baseDelay: TimeInterval = 1
 
     private var subscribedProducts: Set<String> = []
+    private var currentCurrency: Currency = .usd
     private var isConnecting = false
     private var shouldReconnect = true
 
-    private let priceSubject = PassthroughSubject<(productId: String, price: Double, open24h: Double), Never>()
+    private let priceSubject = PassthroughSubject<CoinbasePriceUpdate, Never>()
     private let stateSubject = CurrentValueSubject<ConnectionState, Never>(.disconnected)
 
-    var pricePublisher: AnyPublisher<(productId: String, price: Double, open24h: Double), Never> {
+    var pricePublisher: AnyPublisher<CoinbasePriceUpdate, Never> {
         priceSubject.eraseToAnyPublisher()
     }
 
@@ -53,14 +63,22 @@ actor CoinbaseWebSocketService {
         self.session = URLSession(configuration: config)
     }
 
-    func connect(productIds: [String]) async {
+    func connect(productIds: [String], currency: Currency = .usd) async {
         guard !productIds.isEmpty else {
             AppLogger.log("No product IDs to connect", category: "Coinbase")
             return
         }
 
-        AppLogger.log("Connecting with products: \(productIds)", category: "Coinbase")
-        subscribedProducts = Set(productIds)
+        // Convert product IDs to use the specified currency
+        let currencyProductIds = productIds.map { id -> String in
+            // Extract ticker from product ID (e.g., "BTC-USD" -> "BTC")
+            let ticker = id.components(separatedBy: "-").first ?? id
+            return "\(ticker)-\(currency.coinbaseCode)"
+        }
+
+        AppLogger.log("Connecting with products: \(currencyProductIds)", category: "Coinbase")
+        subscribedProducts = Set(currencyProductIds)
+        currentCurrency = currency
         shouldReconnect = true
         await performConnect()
     }
@@ -73,8 +91,23 @@ actor CoinbaseWebSocketService {
         stateSubject.send(.disconnected)
     }
 
+    func updateCurrency(_ currency: Currency, productIds: [String]) async {
+        if currency != currentCurrency {
+            // Reconnect with new currency
+            await disconnect()
+            currentCurrency = currency
+            shouldReconnect = true
+            await connect(productIds: productIds, currency: currency)
+        }
+    }
+
     func updateSubscriptions(productIds: [String]) async {
-        let newProducts = Set(productIds)
+        let currencyProductIds = productIds.map { id -> String in
+            let ticker = id.components(separatedBy: "-").first ?? id
+            return "\(ticker)-\(currentCurrency.coinbaseCode)"
+        }
+
+        let newProducts = Set(currencyProductIds)
         let toUnsubscribe = subscribedProducts.subtracting(newProducts)
         let toSubscribe = newProducts.subtracting(subscribedProducts)
 
@@ -95,6 +128,11 @@ actor CoinbaseWebSocketService {
             return
         }
         isConnecting = true
+
+        guard let url = URL(string: baseURL) else {
+            isConnecting = false
+            return
+        }
 
         AppLogger.log("Performing connect to \(url)", category: "Coinbase")
         stateSubject.send(.connecting)
@@ -190,8 +228,21 @@ actor CoinbaseWebSocketService {
                 return
             }
 
-            AppLogger.log("Price update: \(productId) = $\(price)", category: "Coinbase")
-            priceSubject.send((productId: productId, price: price, open24h: open24h))
+            let high24h = message.high24h.flatMap { Double($0) }
+            let low24h = message.low24h.flatMap { Double($0) }
+            let volume24h = message.volume24h.flatMap { Double($0) }
+
+            AppLogger.log("Price update: \(productId) = \(price)", category: "Coinbase")
+
+            let update = CoinbasePriceUpdate(
+                productId: productId,
+                price: price,
+                open24h: open24h,
+                high24h: high24h,
+                low24h: low24h,
+                volume24h: volume24h
+            )
+            priceSubject.send(update)
         } else {
             AppLogger.log("Received message type: \(message.type)", category: "Coinbase")
         }

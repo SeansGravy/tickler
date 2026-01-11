@@ -14,6 +14,8 @@ final class PriceManager: ObservableObject {
 
     private var cryptoSymbols: [Symbol] = []
     private var stockSymbols: [Symbol] = []
+    private var currentCurrency: Currency = .usd
+    private var currentSettings: AppSettings = .default
 
     init() {
         AppLogger.log("PriceManager init", category: "PriceManager")
@@ -24,7 +26,7 @@ final class PriceManager: ObservableObject {
         yahooService.pricePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] update in
-                AppLogger.log("Yahoo update: \(update.symbol) = $\(update.price)", category: "Yahoo")
+                AppLogger.log("Yahoo update: \(update.symbol) = \(update.price)", category: "Yahoo")
                 self?.handleYahooUpdate(update)
             }
             .store(in: &cancellables)
@@ -62,7 +64,7 @@ final class PriceManager: ObservableObject {
             guard let self = self else { return }
             for await update in await coinbaseService.pricePublisher.values {
                 await MainActor.run {
-                    AppLogger.log("Coinbase price: \(update.productId) = $\(update.price)", category: "Coinbase")
+                    AppLogger.log("Coinbase price: \(update.productId) = \(update.price)", category: "Coinbase")
                     self.handleCoinbaseUpdate(update)
                 }
             }
@@ -73,11 +75,14 @@ final class PriceManager: ObservableObject {
     func startMonitoring(cryptoSymbols: [Symbol], stockSymbols: [Symbol], settings: AppSettings) {
         self.cryptoSymbols = cryptoSymbols
         self.stockSymbols = stockSymbols
+        self.currentSettings = settings
+        self.currentCurrency = settings.displayCurrency
 
         AppLogger.log("Starting monitoring", category: "PriceManager")
         AppLogger.log("Crypto symbols: \(cryptoSymbols.map { $0.ticker })", category: "PriceManager")
         AppLogger.log("Stock symbols: \(stockSymbols.map { $0.ticker })", category: "PriceManager")
         AppLogger.log("Streaming enabled: \(settings.streamingEnabled)", category: "PriceManager")
+        AppLogger.log("Currency: \(settings.displayCurrency.rawValue)", category: "PriceManager")
 
         // Start Coinbase WebSocket for crypto
         if settings.streamingEnabled && !cryptoSymbols.isEmpty {
@@ -88,7 +93,7 @@ final class PriceManager: ObservableObject {
             setupCoinbaseBindings()
 
             Task {
-                await coinbaseService.connect(productIds: productIds)
+                await coinbaseService.connect(productIds: productIds, currency: settings.displayCurrency)
             }
         } else {
             AppLogger.log("Skipping Coinbase: streaming=\(settings.streamingEnabled), cryptoCount=\(cryptoSymbols.count)", category: "Coinbase")
@@ -129,13 +134,25 @@ final class PriceManager: ObservableObject {
     }
 
     func updateSettings(_ settings: AppSettings) {
+        let currencyChanged = settings.displayCurrency != currentCurrency
+        currentSettings = settings
+        currentCurrency = settings.displayCurrency
+
         yahooService.updateInterval(TimeInterval(settings.stockRefreshInterval.rawValue))
 
         if settings.streamingEnabled {
             let productIds = cryptoSymbols.map { $0.productId }
-            setupCoinbaseBindings()
-            Task {
-                await coinbaseService.connect(productIds: productIds)
+
+            if currencyChanged {
+                // Currency changed, need to reconnect
+                Task {
+                    await coinbaseService.updateCurrency(settings.displayCurrency, productIds: productIds)
+                }
+            } else {
+                setupCoinbaseBindings()
+                Task {
+                    await coinbaseService.connect(productIds: productIds, currency: settings.displayCurrency)
+                }
             }
         } else {
             coinbaseTasks.forEach { $0.cancel() }
@@ -147,19 +164,25 @@ final class PriceManager: ObservableObject {
     }
 
     func price(for symbol: Symbol) -> PriceData? {
-        let key = symbol.type == .crypto ? symbol.productId : symbol.ticker
+        let key = symbol.type == .crypto ? symbol.productId(for: currentCurrency) : symbol.ticker
         return prices[key]
     }
 
-    private func handleCoinbaseUpdate(_ update: (productId: String, price: Double, open24h: Double)) {
+    private func handleCoinbaseUpdate(_ update: CoinbasePriceUpdate) {
         let percentChange = ((update.price - update.open24h) / update.open24h) * 100
         let priceData = PriceData(
             price: update.price,
             percentChange24h: percentChange,
+            high24h: update.high24h,
+            low24h: update.low24h,
+            volume24h: update.volume24h,
             lastUpdated: Date()
         )
         prices[update.productId] = priceData
-        AppLogger.log("Stored price for \(update.productId): $\(update.price) (\(String(format: "%.2f", percentChange))%)", category: "PriceManager")
+        AppLogger.log("Stored price for \(update.productId): \(update.price) (\(String(format: "%.2f", percentChange))%)", category: "PriceManager")
+
+        // Check alerts
+        checkAlertsForCrypto(productId: update.productId, priceData: priceData)
     }
 
     private func handleYahooUpdate(_ update: (symbol: String, price: Double, prevClose: Double)) {
@@ -170,6 +193,26 @@ final class PriceManager: ObservableObject {
             lastUpdated: Date()
         )
         prices[update.symbol] = priceData
-        AppLogger.log("Stored price for \(update.symbol): $\(update.price) (\(String(format: "%.2f", percentChange))%)", category: "PriceManager")
+        AppLogger.log("Stored price for \(update.symbol): \(update.price) (\(String(format: "%.2f", percentChange))%)", category: "PriceManager")
+
+        // Check alerts
+        checkAlertsForStock(ticker: update.symbol, priceData: priceData)
+    }
+
+    private func checkAlertsForCrypto(productId: String, priceData: PriceData) {
+        guard currentSettings.alertsEnabled else { return }
+
+        // Find matching symbol by product ID
+        if let symbol = cryptoSymbols.first(where: { $0.productId(for: currentCurrency) == productId }) {
+            AlertManager.shared.checkAlerts(symbol: symbol, price: priceData, settings: currentSettings)
+        }
+    }
+
+    private func checkAlertsForStock(ticker: String, priceData: PriceData) {
+        guard currentSettings.alertsEnabled else { return }
+
+        if let symbol = stockSymbols.first(where: { $0.ticker == ticker }) {
+            AlertManager.shared.checkAlerts(symbol: symbol, price: priceData, settings: currentSettings)
+        }
     }
 }
