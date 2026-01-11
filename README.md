@@ -6,6 +6,12 @@ A native macOS menu bar app for tracking cryptocurrency and stock prices in real
 ![Swift 5.9](https://img.shields.io/badge/Swift-5.9-orange)
 ![License MIT](https://img.shields.io/badge/License-MIT-green)
 
+## Download
+
+**[⬇️ Download tickler.dmg](https://github.com/SeansGravy/tickler/releases/latest/download/tickler.dmg)**
+
+*First launch: Right-click → Open to bypass Gatekeeper (unsigned app)*
+
 ## Features
 
 - **Real-time crypto prices** via Coinbase WebSocket (no API key required)
@@ -122,6 +128,14 @@ Output: `build/tickler.dmg`
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
+
+## Support
+
+If you find tickler useful, consider supporting development:
+
+☕ [Buy Me a Coffee](https://buymeacoffee.com/wedigp9ylf)
+
+💜 [GitHub Sponsors](https://github.com/sponsors/SeansGravy)
 
 ## Credits
 
